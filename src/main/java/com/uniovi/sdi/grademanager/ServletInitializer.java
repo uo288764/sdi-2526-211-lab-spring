@@ -1,4 +1,4 @@
-package com.uniovi.sdi.sdi2526211labspring;
+package com.uniovi.sdi.grademanager;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
@@ -7,7 +7,7 @@ public class ServletInitializer extends SpringBootServletInitializer {
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(Sdi2526211LabSpringApplication.class);
+        return application.sources(GradeManagerApplication.class);
     }
 
 }

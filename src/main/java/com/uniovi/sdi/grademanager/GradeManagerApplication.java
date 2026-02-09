@@ -1,13 +1,12 @@
-package com.uniovi.sdi.sdi2526211labspring;
+package com.uniovi.sdi.grademanager;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Sdi2526211LabSpringApplication {
-
+public class GradeManagerApplication {
     public static void main(String[] args) {
-        SpringApplication.run(Sdi2526211LabSpringApplication.class, args);
+        SpringApplication.run(GradeManagerApplication.class,
+                args);
     }
-
 }
