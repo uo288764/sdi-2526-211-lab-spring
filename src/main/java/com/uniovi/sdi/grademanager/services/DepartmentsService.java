@@ -34,6 +34,11 @@ public class DepartmentsService {
         departmentsList.add(department);
     }
 
+    public void updateDepartment(Department department) {
+        departmentsList.removeIf(d -> d.getCode().equals(department.getCode()));
+        departmentsList.add(department);
+    }
+
     public void deleteDepartment(Long code) {
         departmentsList.removeIf(department -> department.getCode().equals(code));
     }
