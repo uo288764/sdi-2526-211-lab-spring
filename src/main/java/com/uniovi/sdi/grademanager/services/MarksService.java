@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 
@@ -24,11 +23,11 @@ public class MarksService {
         return marks;
     }
     public Mark getMark(Long id) {
+
         return marksRepository.findById(id).orElse(null);
     }
 
     public void addMark(Mark mark) {
-        // Si en Id es null le asignamos el último + 1 de la lista
         marksRepository.save(mark);
     }
     public void deleteMark(Long id) {
