@@ -5,7 +5,7 @@
 
 <!-- Fragmento de navegación -->
 <nav th:fragment="nav" class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <a class="navbar-brand" href="#"></a>
+    <a class="navbar-brand" href="/home"></a>
     <img src="/images/student-48.png" alt="logo"/>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar"
             aria-controls="myNavbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -17,7 +17,7 @@
                 <a class="nav-link" href="/home">Home</a>
             </li>
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="notasDropdown" role="button" data-toggle="dropdown"
+                <a class="nav-link dropdown-toggle" href="" id="notasDropdown" role="button" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false"> Gestión de notas
                 </a>
                 <div class="dropdown-menu" aria-labelledby="notasDropdown">
@@ -28,7 +28,7 @@
                 </div>
             </li>
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="departmentDropdown" role="button" data-toggle="dropdown"
+                <a class="nav-link dropdown-toggle" href="" id="departmentDropdown" role="button" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false"> Gestión de departamentos
                 </a>
                 <div class="dropdown-menu" aria-labelledby="departmentDropdown">
@@ -37,7 +37,7 @@
                 </div>
             </li>
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="profesorDropdown" role="button" data-toggle="dropdown"
+                <a class="nav-link dropdown-toggle" href="" id="profesorDropdown" role="button" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false"> Gestión de profesores
                 </a>
                 <div class="dropdown-menu" aria-labelledby="profesorDropdown">
@@ -55,6 +55,36 @@
                 <a class="nav-link" href="/identificarse">
                     <i class='fas fa-sign-in-alt' style='font-size:16px'></i>
                     Identifícate</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav justify-content-end">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="" id="btnLanguage" role="button"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span th:text="#{language.change}"></span>
+                </a>
+                <div id="languageDropdownMenuButton" class="dropdown-menu">
+                    <a class="dropdown-item" th:href="@{/home(lang=en)}">
+                        <img th:src="@{/images/if_uk_flag.png}" style="border:0; float:left; margin-right:15px"/>
+                        <span th:text="#{language.en}">Inglés</span>
+                    </a>
+                    <a class="dropdown-item" th:href="@{/home(lang=es)}">
+                        <img th:src="@{/images/if_spain_flag.png}" style="border:0; float:left; margin-right:15px"/>
+                        <span th:text="#{language.es}">Español</span>
+                    </a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/signup">
+                    <i class='fas fa-user-alt' style='font-size:16px'></i>
+                    <span th:text="#{signup.message}"></span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/login">
+                    <i class='fas fa-sign-in-alt' style='font-size:16px'></i>
+                    <span th:text="#{login.message}"></span>
+                </a>
             </li>
         </ul>
     </div>
