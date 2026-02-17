@@ -28,9 +28,9 @@ public class MarksController {
         marksService.deleteMark(id);
         return "redirect:/mark/list";
     }
-    @RequestMapping(value="/mark/list", method = RequestMethod.GET)
+    @GetMapping ("/mark/list")
     public String getList(Model model) {
-        model.addAttribute("markList", marksService.getMarks());
+        model.addAttribute("marksList", marksService.getMarks());
         return "mark/list";
     }
     @GetMapping("/mark/details/{id}")
@@ -49,6 +49,12 @@ public class MarksController {
         mark.setId(id);
         marksService.addMark(mark);
         return "redirect:/mark/details/"+id;
+    }
+
+    @GetMapping("/mark/list/update")
+    public String updateList(Model model){
+        model.addAttribute("marksList", marksService.getMarks() );
+        return "mark/list :: marksTable";
     }
 
 }
