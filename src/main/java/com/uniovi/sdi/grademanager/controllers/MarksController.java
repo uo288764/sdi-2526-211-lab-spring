@@ -2,6 +2,7 @@ package com.uniovi.sdi.grademanager.controllers;
 
 import com.uniovi.sdi.grademanager.entities.Mark;
 import com.uniovi.sdi.grademanager.services.MarksService;
+import com.uniovi.sdi.grademanager.services.UsersService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -10,18 +11,36 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @Controller
 public class MarksController {
-
-    @Autowired //Inyectar el servicio
-    private MarksService marksService;
-
-    @GetMapping(value = "/mark/add")
-    public String getMark() {
+    private final MarksService marksService;
+    private final UsersService usersService;
+    public MarksController(MarksService marksService, UsersService usersService) {
+        this.marksService = marksService;
+        this.usersService = usersService;
+    }
+    // Modificamos los siguientes metodos
+    @GetMapping("/mark/add")
+    public String getMark(Model model) {
+        model.addAttribute("usersList", usersService.getUsers());
         return "mark/add";
     }
     @PostMapping("/mark/add")
     public String setMark(@ModelAttribute Mark mark) {
         marksService.addMark(mark);
-        return "redirect:/mark/list";
+        return "mark/add";
+    }
+    @GetMapping(value = "/mark/edit/{id}")
+    public String getEdit(Model model, @PathVariable Long id) {
+        model.addAttribute("mark", marksService.getMark(id));
+        model.addAttribute("usersList", usersService.getUsers());
+        return "mark/edit";
+    }
+    @PostMapping(value = "/mark/edit/{id}")
+    public String setEdit(@ModelAttribute Mark mark, @PathVariable Long id) {
+        Mark originalMark = marksService.getMark(id);
+        originalMark.setScore(mark.getScore());
+        originalMark.setDescription(mark.getDescription());
+        marksService.addMark(originalMark);
+        return "redirect:/mark/details/" + id;
     }
     @RequestMapping("/mark/delete/{id}")
     public String deleteMark(@PathVariable Long id) {
@@ -39,17 +58,7 @@ public class MarksController {
         return "mark/details";
     }
 
-    @GetMapping(value = "/mark/edit/{id}")
-    public String getEdit(Model model, @PathVariable Long id) {
-        model.addAttribute("mark", marksService.getMark(id));
-        return "mark/edit";
-    }
-    @PostMapping(value="/mark/edit/{id}")
-    public String setEdit(@ModelAttribute Mark mark, @PathVariable Long id){
-        mark.setId(id);
-        marksService.addMark(mark);
-        return "redirect:/mark/details/"+id;
-    }
+
 
     @GetMapping("/mark/list/update")
     public String updateList(Model model){
