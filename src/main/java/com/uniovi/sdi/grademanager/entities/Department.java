@@ -7,6 +7,8 @@ public class Department {
     @Id
     @GeneratedValue
     private Long code;
+
+    private String codeString;
     private String name;
     private String faculty;
     private String phone;
@@ -73,5 +75,13 @@ public class Department {
                 ", phone='" + phone + '\'' +
                 ", professors=" + professors +
                 '}';
+    }
+
+    public String getCodeString() {
+        return codeString;
+    }
+
+    public void setCodeString(String codeString) {
+        this.codeString = codeString;
     }
 }

@@ -45,4 +45,8 @@ public class DepartmentsService {
     public void deleteDepartment(Long code) {
         departmentsRepository.deleteById(code);
     }
+
+    public Department getDepartmentByCodeString(String codeString) {
+        return departmentsRepository.findByCodeString(codeString).orElse(null);
+    }
 }
