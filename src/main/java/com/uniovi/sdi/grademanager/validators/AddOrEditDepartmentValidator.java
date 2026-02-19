@@ -24,22 +24,24 @@ public class AddOrEditDepartmentValidator implements Validator {
     public void validate(Object target, Errors errors) {
         Department department = (Department) target;
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "codeString", "Error.empty");
-        if (department.getCodeString().length() != 9) {
+        if (department.getCodeString() == null || department.getCodeString().length() != 9) {
             errors.rejectValue("codeString", "Error.department.codeString.length");
+        } else {
+            if (!Character.isLetter(department.getCodeString().charAt(department.getCodeString().length() - 1))) {
+                errors.rejectValue("codeString", "Error.department.codeString.letter");
+            }
+            Department existing = departmentsService.getDepartmentByCodeString(department.getCodeString());
+            if (existing != null && !existing.getCode().equals(department.getCode())) {
+                errors.rejectValue("codeString", "Error.department.codeString.duplicate");
+            }
         }
-        if (!Character.isLetter(department.getCodeString().charAt(department.getCodeString().length() - 1))) {
-            errors.rejectValue("codeString", "Error.department.codeString.letter");
-        }
-        if (departmentsService.getDepartmentByCodeString(department.getCodeString()) != null) {
-            errors.rejectValue("codeString", "Error.department.codeString.duplicate");
-        }
-        if (department.getName().isBlank()) {
+        if (department.getName() == null || department.getName().isBlank()) {
             errors.rejectValue("name", "Error.department.name.length");
         }
-        if (department.getFaculty().isBlank()) {
+        if (department.getFaculty() == null || department.getFaculty().isBlank()) {
             errors.rejectValue("faculty", "Error.department.faculty.length");
         }
-        if (department.getPhone().isBlank()) {
+        if (department.getPhone() == null || department.getPhone().isBlank()) {
             errors.rejectValue("phone", "Error.department.phone.length");
         }
     }
