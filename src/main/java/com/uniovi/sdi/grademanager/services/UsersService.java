@@ -41,6 +41,16 @@ public class UsersService {
         return usersRepository.findByDni(dni);
     }
 
+    public void updateUser(Long id, User formUser) {
+        User original = usersRepository.findById(id).orElse(null);
+        if (original == null)
+            return;
+        original.setDni(formUser.getDni());
+        original.setName(formUser.getName());
+        original.setLastName(formUser.getLastName());
+        usersRepository.save(original);
+    }
+
     public void deleteUser(Long id) {
         usersRepository.deleteById(id);
     }

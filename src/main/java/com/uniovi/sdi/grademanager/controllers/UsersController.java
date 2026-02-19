@@ -79,14 +79,13 @@ public class UsersController {
 
     @GetMapping(value = "/user/edit/{id}")
     public String getEdit(Model model, @PathVariable Long id) {
-        User user = usersService.getUser(id);
-        model.addAttribute("user", user);
+        model.addAttribute("user", usersService.getUser(id));
+        model.addAttribute("usersList", usersService.getUsers());
         return "user/edit";
     }
-
     @PostMapping(value = "/user/edit/{id}")
-    public String setEdit(@PathVariable Long id, @ModelAttribute User user) {
-        usersService.addUser(user);
+    public String setEdit(@ModelAttribute User user, @PathVariable Long id) {
+        usersService.updateUser(id, user);
         return "redirect:/user/details/" + id;
     }
     @RequestMapping(value = {"/home"}, method = RequestMethod.GET)
