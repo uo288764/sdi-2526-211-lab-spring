@@ -10,18 +10,24 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.servlet.http.HttpSession;
+import java.util.HashSet;
+import java.util.Set;
+
 
 @Controller
 public class MarksController {
     private final MarksService marksService;
     private final UsersService usersService;
     private final AddOrEditMarkValidator addOrEditMarkValidator;
+    private final HttpSession httpSession;
 
     @Autowired
-    public MarksController(MarksService marksService, UsersService usersService, AddOrEditMarkValidator addOrEditMarkValidator) {
+    public MarksController(MarksService marksService, UsersService usersService, AddOrEditMarkValidator addOrEditMarkValidator, HttpSession httpSession) {
         this.marksService = marksService;
         this.usersService = usersService;
         this.addOrEditMarkValidator = addOrEditMarkValidator;
+        this.httpSession = httpSession;
     }
 
     @GetMapping("/mark/add")
@@ -70,6 +76,9 @@ public class MarksController {
 
     @GetMapping("/mark/list")
     public String getList(Model model) {
+        Set<Mark> consultedList = (Set<Mark>) (httpSession.getAttribute("consultedList") != null ?
+                httpSession.getAttribute("consultedList") : new HashSet<>());
+        model.addAttribute("consultedList", consultedList);
         model.addAttribute("marksList", marksService.getMarks());
         return "mark/list";
     }
