@@ -45,14 +45,26 @@ public class MarksService {
         }
     }
 
+    public List<Mark> searchMarksByDescriptionAndNameForUser(String searchText, User user) {
+        List<Mark> marks = new ArrayList<>();
+        searchText = "%"+searchText+"%";
+        if (user.getRole().equals("ROLE_STUDENT")) {
+            marks = marksRepository.searchByDescriptionNameAndUser(searchText, user);
+        }
+        if (user.getRole().equals("ROLE_PROFESSOR")) {
+            marks = marksRepository.searchByDescriptionAndName(searchText);
+        }
+        return marks;
+    }
+
     public List<Mark> getMarksForUser(User user) {
         List<Mark> marks = new ArrayList<>();
 
         if ("ROLE_STUDENT".equals(user.getRole())) {
             marks = marksRepository.findAllByUser(user);
         } else if ("ROLE_PROFESSOR".equals(user.getRole())) {
-            marks = getMarks();
-        }
+        marks = getMarks();
+    }
 
         return marks;
     }

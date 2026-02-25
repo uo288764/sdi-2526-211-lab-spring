@@ -46,7 +46,7 @@ public class SecurityConfiguration {
                 .formLogin(form -> form
                         .loginPage("/login")
                         .permitAll()
-                        .defaultSuccessUrl("/home", true)
+                        .defaultSuccessUrl("/mark/list", true)
                 )
                 .logout((logout) -> logout
                         .logoutSuccessUrl("/home")

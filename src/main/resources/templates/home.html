@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
-<head th:replace="fragments/head"></head>
+<nav th:replace="~{fragments/head}"></nav>
 <body>
-<nav th:replace="fragments/nav"></nav>
+<nav th:replace="~{fragments/nav}"></nav>
 <div class="container" style="text-align: center">
     <h2 th:text="#{welcome.message}"></h2>
     <h3>Esta es una zona privada la web</h3>
