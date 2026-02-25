@@ -1,90 +1,79 @@
-<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head></head>
-<body>
-
-<!-- Fragmento de navegación -->
-<nav th:fragment="nav" class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <a class="navbar-brand" href="/home"></a>
+<!-- nav.html -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-
+springsecurity6">
+    <a class="navbar-brand" href="#"></a>
     <img src="/images/student-48.png" alt="logo"/>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar"
-            aria-controls="myNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="myNavbar">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item ">
-                <a class="nav-link" href="/home">Home<span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item dropdown active">
+    <div class="collapse navbar-collapse justify-content-end " id="myNavbar">
+        <ul class="navbar-nav mr-auto>
+<li class="nav-item "" sec:authorize="isAuthenticated()">
+        <a class="nav-link" href="/home">Home<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item dropdown active " sec:authorize="isAuthenticated()">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                aria-haspopup="true" aria-expanded="false"> Gestión de notas
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="/mark/list">Ver Notas</a>
-                <a class="dropdown-item" href="/mark/add">Agregar Nota</a>
+                <a class="dropdown-item" href="/mark/add" sec:authorize="hasRole('ROLE_PROFESSOR')">Agregar Nota</a>
             </div>
-            </li>
-            <li id= "users-menu" class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" id="userDropDown" data-toggle="dropdown" href="#">
-                    Gestión de Usuarios
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="/user/add">Agregar usuario</a>
-                    <a class="dropdown-item" href="/user/list">Ver Usuarios</a>
-                </div>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="" id="departmentDropdown" role="button" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false"> Gestión de departamentos
-                </a>
-                <div class="dropdown-menu" aria-labelledby="departmentDropdown">
-                    <a class="dropdown-item" href="/departments">Ver Departamentos</a>
-                    <a class="dropdown-item" href="/department/add">Agregar Departamento</a>
-                </div>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="" id="profesorDropdown" role="button" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false"> Gestión de profesores
-                </a>
-                <div class="dropdown-menu" aria-labelledby="profesorDropdown">
-                    <a class="dropdown-item" href="/professor/list">Ver profesores</a>
-                </div>
-            </li>
+        </li>
+        <li class="nav-item dropdown" sec:authorize="hasRole('ROLE_ADMIN')" >
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+               arias-haspopup="true" aria-expanded="false">Gestión de usuarios
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="/user/add">Agregar usuario</a>
+                <a class="dropdown-item" href="/user/list">Ver usuarios</a>
+            </div>
+        </li>
+        <li class="nav-item dropdown" sec:authorize="hasRole('ROLE_ADMIN')" >
+            <a class="nav-link dropdown-toggle" href="#" id="profesorDropdown" role="button" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false"> Gestión de profesores
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="/professor/list">Ver profesores</a>
+            </div>
+        </li>
         </ul>
-
         <ul class="navbar-nav justify-content-end">
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="" id="btnLanguage" role="button"
-                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle" href="#" id="btnLanguage" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
                     <span th:text="#{language.change}"></span>
                 </a>
-                <div id="languageDropdownMenuButton" class="dropdown-menu">
-                    <a class="dropdown-item" th:href="@{/home(lang=en)}">
-                        <img th:src="@{/images/if_uk_flag.png}" style="border:0; float:left; margin-right:15px"/>
+                <div id="languageDropdownMenuButton" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" id="btnEnglish" value="EN">
+                        <img th:src="@{/images/if_uk_flag.png}" style="border: 0; float: left; margin-right: 15px"/>
                         <span th:text="#{language.en}">Inglés</span>
                     </a>
-                    <a class="dropdown-item" th:href="@{/home(lang=es)}">
-                        <img th:src="@{/images/if_spain_flag.png}" style="border:0; float:left; margin-right:15px"/>
+                    <a class="dropdown-item" id="btnSpanish" value="ES">
+                        <img th:src="@{/images/if_spain_flag.png}" style="border: 0; float: left; margin-right: 15px"/>
                         <span th:text="#{language.es}">Español</span>
                     </a>
                 </div>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/signup">
+            <li sec:authorize="!isAuthenticated()" class="nav-item">
+                <a class="nav-link" href="/signup" th:text="#{signup.message}">
                     <i class='fas fa-user-alt' style='font-size:16px'></i>
-                    <span th:text="#{signup.message}"></span>
+                    <span>Registrate</span>
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/login">
+            <li sec:authorize="!isAuthenticated()" class="nav-item">
+                <a class="nav-link" href="/login" th:text="#{login.message}">
                     <i class='fas fa-sign-in-alt' style='font-size:16px'></i>
-                    <span th:text="#{login.message}"></span>
+                    <span>Identifícate</span>
+                </a>
+            </li>
+            <li sec:authorize="isAuthenticated()" class="nav-item">
+                <a class="nav-link" href="/logout">
+                    <i class='fas fa-sign-out-alt' style='font-size:16px'></i>
+                    <span>Desconectar</span>
                 </a>
             </li>
         </ul>
     </div>
 </nav>
-
-</body>
-</html>

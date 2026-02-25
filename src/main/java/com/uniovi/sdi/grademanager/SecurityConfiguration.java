@@ -36,6 +36,11 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/images/**", "/script/**", "/", "/signup",
                                 "/login/**").permitAll()
+                                    .requestMatchers("/mark/add").hasAuthority("ROLE_PROFESSOR")
+                                    .requestMatchers("/mark/edit/*").hasAuthority("ROLE_PROFESSOR")
+                                    .requestMatchers("/mark/delete/*").hasAuthority("ROLE_PROFESSOR")
+                                    .requestMatchers("/mark/**").hasAnyAuthority("ROLE_STUDENT", "ROLE_PROFESSOR", "ROLE_ADMIN")
+                                    .requestMatchers("/user/**").hasAnyRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -46,6 +51,8 @@ public class SecurityConfiguration {
                 .logout((logout) -> logout
                         .logoutSuccessUrl("/home")
                         .permitAll()
+                ).securityContext(securityContext -> securityContext
+                        .requireExplicitSave(true) // Asegura que el SecurityContext se guarde en la sesión
                 );
         return http.build();
     }
