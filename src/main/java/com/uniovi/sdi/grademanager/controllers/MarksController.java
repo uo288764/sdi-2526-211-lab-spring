@@ -20,14 +20,13 @@ public class MarksController {
     private final MarksService marksService;
     private final UsersService usersService;
     private final AddOrEditMarkValidator addOrEditMarkValidator;
-    private final HttpSession httpSession;
+
 
     @Autowired
-    public MarksController(MarksService marksService, UsersService usersService, AddOrEditMarkValidator addOrEditMarkValidator, HttpSession httpSession) {
+    public MarksController(MarksService marksService, UsersService usersService, AddOrEditMarkValidator addOrEditMarkValidator ) {
         this.marksService = marksService;
         this.usersService = usersService;
         this.addOrEditMarkValidator = addOrEditMarkValidator;
-        this.httpSession = httpSession;
     }
 
     @GetMapping("/mark/add")
@@ -76,12 +75,8 @@ public class MarksController {
 
     @GetMapping("/mark/list")
     public String getList(Model model) {
-        Set<Mark> consultedList = (Set<Mark>) (httpSession.getAttribute("consultedList") != null ?
-                httpSession.getAttribute("consultedList") : new HashSet<>());
-        model.addAttribute("consultedList", consultedList);
         model.addAttribute("marksList", marksService.getMarks());
-        return "mark/list";
-    }
+        return "mark/list";}
 
     @GetMapping("/mark/details/{id}")
     public String getDetail(Model model, @PathVariable Long id) {

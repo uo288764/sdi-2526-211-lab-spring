@@ -3,6 +3,7 @@ package com.uniovi.sdi.grademanager.controllers;
 import com.uniovi.sdi.grademanager.entities.User;
 import com.uniovi.sdi.grademanager.services.SecurityService;
 import com.uniovi.sdi.grademanager.services.UsersService;
+import com.uniovi.sdi.grademanager.services.RolesService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -17,12 +18,14 @@ public class UsersController {
     private final UsersService usersService;
     private final SecurityService securityService;
     private final SignUpFormValidator signUpFormValidator;
+    private final RolesService rolesService;
 
     public UsersController(UsersService usersService, SecurityService securityService, SignUpFormValidator
-            signUpFormValidator) {
+            signUpFormValidator, RolesService rolesService) {
         this.usersService = usersService;
         this.securityService = securityService;
         this.signUpFormValidator = signUpFormValidator;
+        this.rolesService = rolesService;
     }
 
     @GetMapping("/signup")
@@ -37,6 +40,7 @@ public class UsersController {
         if (result.hasErrors()) {
             return "signup";
         }
+        user.setRole(rolesService.getRoles()[0]);
         usersService.addUser(user);
         securityService.autoLogin(user.getDni(), user.getPasswordConfirm());
         return "redirect:home";
@@ -55,6 +59,7 @@ public class UsersController {
 
     @GetMapping(value = "/user/add")
     public String getUser(Model model) {
+        model.addAttribute("rolesList", rolesService.getRoles());
         model.addAttribute("usersList", usersService.getUsers());
         return "user/add";
     }
