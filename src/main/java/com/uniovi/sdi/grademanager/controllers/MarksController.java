@@ -1,29 +1,29 @@
 package com.uniovi.sdi.grademanager.controllers;
 
 import com.uniovi.sdi.grademanager.entities.Mark;
+import com.uniovi.sdi.grademanager.entities.User;
 import com.uniovi.sdi.grademanager.services.MarksService;
 import com.uniovi.sdi.grademanager.services.UsersService;
 import com.uniovi.sdi.grademanager.validators.AddOrEditMarkValidator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import jakarta.servlet.http.HttpSession;
-import java.util.HashSet;
-import java.util.Set;
 
+import java.security.Principal;
 
 @Controller
 public class MarksController {
+
     private final MarksService marksService;
     private final UsersService usersService;
     private final AddOrEditMarkValidator addOrEditMarkValidator;
 
-
     @Autowired
-    public MarksController(MarksService marksService, UsersService usersService, AddOrEditMarkValidator addOrEditMarkValidator ) {
+    public MarksController(MarksService marksService, UsersService usersService,
+                           AddOrEditMarkValidator addOrEditMarkValidator) {
         this.marksService = marksService;
         this.usersService = usersService;
         this.addOrEditMarkValidator = addOrEditMarkValidator;
@@ -55,9 +55,11 @@ public class MarksController {
     }
 
     @PostMapping(value = "/mark/edit/{id}")
-    public String setEdit(@ModelAttribute Mark mark, BindingResult result, @PathVariable Long id) {
+    public String setEdit(@Validated Mark mark, BindingResult result, @PathVariable Long id, Model model) {
         addOrEditMarkValidator.validate(mark, result);
         if (result.hasErrors()) {
+            model.addAttribute("mark", marksService.getMark(id));
+            model.addAttribute("usersList", usersService.getUsers());
             return "mark/edit";
         }
         Mark originalMark = marksService.getMark(id);
@@ -74,8 +76,10 @@ public class MarksController {
     }
 
     @GetMapping("/mark/list")
-    public String getList(Model model) {
-        model.addAttribute("marksList", marksService.getMarks());
+    public String getList(Model model, Principal principal) {
+        String dni = principal.getName(); // DNI es el name de la autenticación
+        User user = usersService.getUserByDni(dni);
+        model.addAttribute("marksList", marksService.getMarksForUser(user));
         return "mark/list";
     }
 
@@ -86,8 +90,10 @@ public class MarksController {
     }
 
     @GetMapping("/mark/list/update")
-    public String updateList(Model model) {
-        model.addAttribute("marksList", marksService.getMarks());
+    public String updateList(Model model, Principal principal) {
+        String dni = principal.getName(); // DNI es el name de la autenticación
+        User user = usersService.getUserByDni(dni);
+        model.addAttribute("marksList", marksService.getMarksForUser(user));
         return "mark/list :: marksTable";
     }
 
@@ -96,6 +102,7 @@ public class MarksController {
         marksService.setMarkResend(true, id);
         return "redirect:/mark/list";
     }
+
     @GetMapping("/mark/{id}/noresend")
     public String setResendFalse(@PathVariable Long id) {
         marksService.setMarkResend(false, id);
