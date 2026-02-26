@@ -1,9 +1,12 @@
 package com.uniovi.sdi.grademanager.controllers;
 
+import com.uniovi.sdi.grademanager.entities.Mark;
 import com.uniovi.sdi.grademanager.entities.User;
 import com.uniovi.sdi.grademanager.services.SecurityService;
 import com.uniovi.sdi.grademanager.services.UsersService;
 import com.uniovi.sdi.grademanager.services.RolesService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -12,6 +15,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.uniovi.sdi.grademanager.validators.SignUpFormValidator;
+
+import java.security.Principal;
 
 @Controller
 public class UsersController {
@@ -92,14 +97,6 @@ public class UsersController {
     public String setEdit(@ModelAttribute User user, @PathVariable Long id) {
         usersService.updateUser(id, user);
         return "redirect:/user/details/" + id;
-    }
-    @RequestMapping(value = {"/home"}, method = RequestMethod.GET)
-    public String home(Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String dni = auth.getName();
-        User activeUser = usersService.getUserByDni(dni);
-        model.addAttribute("marksList", activeUser.getMarks());
-        return "home";
     }
 
 }
