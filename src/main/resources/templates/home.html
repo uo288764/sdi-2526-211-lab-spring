@@ -8,8 +8,6 @@
     <h3>Esta es una zona privada de la web</h3>
     <p>Usuario Autenticado como: <span th:text="${#authentication.name}"></span></p>
 
-    <p>Las notas que actualmente figuran en el sistema son las siguientes:</p>
-
     <div th:replace="~{fragments/tableMarks :: tableMarks}"></div>
 
 </div>

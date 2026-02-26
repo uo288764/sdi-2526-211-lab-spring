@@ -4,14 +4,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
 
 @Configuration
 public class SecurityConfiguration {
@@ -24,6 +22,7 @@ public class SecurityConfiguration {
         authProvider.setPasswordEncoder(passwordEncoder);
         return new ProviderManager(authProvider);
     }
+
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
@@ -34,13 +33,32 @@ public class SecurityConfiguration {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/images/**", "/script/**", "/", "/signup",
-                                "/login/**").permitAll()
-                                    .requestMatchers("/mark/add").hasAuthority("ROLE_PROFESSOR")
-                                    .requestMatchers("/mark/edit/*").hasAuthority("ROLE_PROFESSOR")
-                                    .requestMatchers("/mark/delete/*").hasAuthority("ROLE_PROFESSOR")
-                                    .requestMatchers("/mark/**").hasAnyAuthority("ROLE_STUDENT", "ROLE_PROFESSOR", "ROLE_ADMIN")
-                                    .requestMatchers("/user/**").hasAnyRole("ADMIN")
+                        .requestMatchers("/css/**", "/images/**", "/script/**", "/", "/signup", "/login/**").permitAll()
+
+                        .requestMatchers("/mark/add").hasAuthority("ROLE_PROFESSOR")
+                        .requestMatchers("/mark/edit/*").hasAuthority("ROLE_PROFESSOR")
+                        .requestMatchers("/mark/delete/*").hasAuthority("ROLE_PROFESSOR")
+                        .requestMatchers("/mark/list/update").hasAnyAuthority("ROLE_STUDENT", "ROLE_PROFESSOR", "ROLE_ADMIN")
+                        .requestMatchers("/mark/*/resend").hasAuthority("ROLE_STUDENT")
+                        .requestMatchers("/mark/*/noresend").hasAuthority("ROLE_STUDENT")
+                        .requestMatchers("/mark/**").hasAnyAuthority("ROLE_STUDENT", "ROLE_PROFESSOR", "ROLE_ADMIN")
+
+                        .requestMatchers("/home", "/home/update").authenticated()
+
+                        .requestMatchers("/user/**").hasAuthority("ROLE_ADMIN")
+
+                        .requestMatchers("/department/add").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/department/edit/*").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/department/delete/*").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/department/details/*").hasAnyAuthority("ROLE_PROFESSOR", "ROLE_ADMIN")
+                        .requestMatchers("/departments").authenticated()
+
+                        .requestMatchers("/professor/add").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/professor/edit/*").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/department/delete/*").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/department/details/*").hasAnyAuthority("ROLE_PROFESSOR", "ROLE_ADMIN")
+                        .requestMatchers("/department").authenticated()
+
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -49,10 +67,11 @@ public class SecurityConfiguration {
                         .defaultSuccessUrl("/home", true)
                 )
                 .logout((logout) -> logout
-                        .logoutSuccessUrl("/home")
+                        .logoutSuccessUrl("/login")
                         .permitAll()
-                ).securityContext(securityContext -> securityContext
-                        .requireExplicitSave(true) // Asegura que el SecurityContext se guarde en la sesión
+                )
+                .securityContext(securityContext -> securityContext
+                        .requireExplicitSave(true)
                 );
         return http.build();
     }

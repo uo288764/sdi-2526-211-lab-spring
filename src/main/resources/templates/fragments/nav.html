@@ -32,12 +32,22 @@
                     <a class="dropdown-item" href="/user/list">Ver usuarios</a>
                 </div>
             </li>
-            <li class="nav-item dropdown" sec:authorize="hasRole('ROLE_ADMIN')">
+            <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
                 <a class="nav-link dropdown-toggle" href="#" id="profesorDropdown" role="button" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">Gestión de profesores
                 </a>
                 <div class="dropdown-menu" aria-labelledby="profesorDropdown">
                     <a class="dropdown-item" href="/professor/list">Ver profesores</a>
+                    <a class="dropdown-item" href="/professor/add" sec:authorize="hasRole('ROLE_ADMIN')">Agregar profesor</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                <a class="nav-link dropdown-toggle" href="#" id="departmentDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">Gestión de departamentos
+                </a>
+                <div class="dropdown-menu" aria-labelledby="departmentDropdown">
+                    <a class="dropdown-item" href="/departments">Ver departamentos</a>
+                    <a class="dropdown-item" href="/department/add" sec:authorize="hasRole('ROLE_ADMIN')">Agregar departamento</a>
                 </div>
             </li>
         </ul>
