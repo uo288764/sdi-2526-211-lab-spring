@@ -2,6 +2,8 @@ package com.uniovi.sdi.grademanager;
 
 import com.uniovi.sdi.grademanager.pageobjects.PO_HomeView;
 import com.uniovi.sdi.grademanager.pageobjects.PO_Properties;
+import com.uniovi.sdi.grademanager.pageobjects.PO_SignUpView;
+import com.uniovi.sdi.grademanager.pageobjects.PO_View;
 import org.openqa.selenium.WebElement;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.openqa.selenium.WebDriver;
@@ -88,22 +90,47 @@ class GradeManagerApplicationTests {
                 PO_Properties.getSPANISH(), PO_Properties.getENGLISH());
     }
 
+    //PR05. Prueba del formulario de registro. registro con datos correctos
     @Test
     @Order(6)
-    void PR06() {
-        Assertions.assertTrue(true);
+    public void PR05() {
+        //Vamos al formulario de registro
+        PO_HomeView.clickOption(driver, "signup", "class", "btn btn-primary");
+        //Rellenamos el formulario.
+        PO_SignUpView.fillForm(driver, "77777778A", "Josefo", "Perez", "77777", "77777");
+        //Comprobamos que entramos en la sección privada y nos nuestra el texto a buscar
+        String checkText = "Notas del usuario";
+        List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.getFirst().getText());
     }
 
+    //PR06A. Prueba del formulario de registro. DNI repetido en la BD
+// Propiedad: Error.signup.dni.duplicate
     @Test
     @Order(7)
-    void PR07() {
-        Assertions.assertTrue(true);
+    public void PR06A() {
+        PO_HomeView.clickOption(driver, "signup", "class", "btn btn-primary");
+        PO_SignUpView.fillForm(driver, "99999990A", "Josefo", "Perez", "77777", "77777");
+        List<WebElement> result = PO_SignUpView.checkElementByKey(driver, "Error.signup.dni.duplicate",
+                PO_Properties.getSPANISH());
+        //Comprobamos el error de DNI repetido.
+        String checkText = PO_HomeView.getP().getString("Error.signup.dni.duplicate",
+                PO_Properties.getSPANISH());
+        Assertions.assertEquals(checkText, result.getFirst().getText());
     }
-
+    //PR06B. Prueba del formulario de registro. Nombre corto.
+// Propiedad: Error.signup.dni.length
     @Test
     @Order(8)
-    void PR08() {
-        Assertions.assertTrue(true);
+    public void PR06B() {
+        PO_HomeView.clickOption(driver, "signup", "class", "btn btn-primary");
+        PO_SignUpView.fillForm(driver, "99999990B", "Jose", "Perez", "77777", "77777");
+        List<WebElement> result = PO_SignUpView.checkElementByKey(driver, "Error.signup.name.length",
+                PO_Properties.getSPANISH());
+        //Comprobamos el error de Nombre corto de nombre corto .
+        String checkText = PO_HomeView.getP().getString("Error.signup.name.length",
+                PO_Properties.getSPANISH());
+        Assertions.assertEquals(checkText, result.getFirst().getText());
     }
 
     @Test
