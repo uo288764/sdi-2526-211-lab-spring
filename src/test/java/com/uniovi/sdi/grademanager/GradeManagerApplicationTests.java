@@ -1,14 +1,17 @@
 package com.uniovi.sdi.grademanager;
 
+import com.uniovi.sdi.grademanager.pageobjects.*;
 import com.uniovi.sdi.grademanager.pageobjects.PO_HomeView;
 import com.uniovi.sdi.grademanager.pageobjects.PO_Properties;
 import com.uniovi.sdi.grademanager.pageobjects.PO_SignUpView;
 import com.uniovi.sdi.grademanager.pageobjects.PO_View;
+import jakarta.transaction.Transactional;
 import org.openqa.selenium.WebElement;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.junit.jupiter.api.*;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.List;
 
@@ -85,6 +88,7 @@ class GradeManagerApplicationTests {
     //PR04. Opción de navegación. Cambio de idioma de Español a Inglés y vuelta a Español
     @Test
     @Order(5)
+    @DirtiesContext
     public void PR04() {
         PO_HomeView.checkChangeLanguage(driver, "btnSpanish", "btnEnglish",
                 PO_Properties.getSPANISH(), PO_Properties.getENGLISH());
@@ -118,6 +122,10 @@ class GradeManagerApplicationTests {
                 PO_Properties.getSPANISH());
         Assertions.assertEquals(checkText, result.getFirst().getText());
     }
+
+
+    //PR06B. Prueba del formulario de registro. Nombre corto.
+// Propiedad: Error.signup.dni.length
     //PR06B. Prueba del formulario de registro. Nombre corto.
 // Propiedad: Error.signup.dni.length
     @Test
@@ -133,15 +141,18 @@ class GradeManagerApplicationTests {
         Assertions.assertEquals(checkText, result.getFirst().getText());
     }
 
-    @Test
-    @Order(9)
-    void PR09() {
-        Assertions.assertTrue(true);
-    }
 
     @Test
-    @Order(10)
-    void PR10() {
-        Assertions.assertTrue(true);
+    @Order(9)
+    public void PR07() {
+        //Vamos al formulario de logueo.
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+        //Rellenamos el formulario
+        PO_LoginView.fillLoginForm(driver, "99999990A", "123456");
+        //Comprobamos que entramos en la pagina privada de Alumno
+        String checkText = "Notas del usuario";
+        List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result. getFirst().getText());
     }
+
 }

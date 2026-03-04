@@ -34,3 +34,4 @@ build/
 
 #priv
 .commands.txt
+/commands.txt
